@@ -56,18 +56,43 @@ export const useStore = create((set, get) => ({
         }
     },
 
+    // 3. Creazione Nuova Risorsa
+    createResource: async (resourceData) => {
+        set({ error: null });
+        try {
+            await api.createResource(resourceData);
+            // Non aggiungiamo qui perché arriverà tramite realtime subscription
+        } catch (err) {
+            console.error("Create failed", err);
+            set({ error: "Errore creazione: " + err.message });
+        }
+    },
+
     // BONUS: Realtime Subscriptions
     subscribeToUpdates: () => {
         // Chiama la funzione subscribe dell'API
         // Quando arriva un aggiornamento (callback), aggiorniamo lo Store
-        const unsubscribe = api.subscribe((id, updatedResource) => {
-            console.log(`[Realtime] Received update for ${updatedResource.name}`);
+        const unsubscribe = api.subscribe((action, resource) => {
+            console.log(`[Realtime] Received ${action} for ${resource.name}`);
 
-            set((state) => ({
-                resources: state.resources.map((res) =>
-                    res.id === id ? updatedResource : res
-                )
-            }));
+            if (action === 'create') {
+                // Aggiungi la nuova risorsa alla lista
+                set((state) => ({
+                    resources: [...state.resources, resource]
+                }));
+            } else if (action === 'update') {
+                // Aggiorna la risorsa esistente
+                set((state) => ({
+                    resources: state.resources.map((res) =>
+                        res.id === resource.id ? resource : res
+                    )
+                }));
+            } else if (action === 'delete') {
+                // Rimuovi la risorsa dalla lista
+                set((state) => ({
+                    resources: state.resources.filter((res) => res.id !== resource.id)
+                }));
+            }
         });
 
         // Ritorniamo la funzione di pulizia (per quando il componente si smonta)

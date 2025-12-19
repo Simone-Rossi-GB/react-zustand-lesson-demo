@@ -47,21 +47,37 @@ export const api = {
     };
   },
 
+  // [CREATE] Crea una nuova risorsa
+  createResource: async (resourceData) => {
+    const record = await pb.collection('resources').create({
+      name: resourceData.name,
+      quantity: resourceData.quantity,
+      unit: resourceData.unit,
+      type: resourceData.type
+    });
+    return {
+      id: record.id,
+      name: record.name,
+      quantity: record.quantity,
+      unit: record.unit,
+      type: record.type
+    };
+  },
+
   // [REALTIME] Sottoscrizione agli aggiornamenti
   subscribe: (callback) => {
     // Sottoscriviti a tutti i cambiamenti nella collection 'resources'
     pb.collection('resources').subscribe('*', (e) => {
-      if (e.action === 'update') {
-        const updatedResource = {
-          id: e.record.id,
-          name: e.record.name,
-          quantity: e.record.quantity,
-          unit: e.record.unit,
-          type: e.record.type
-        };
-        // Chiama la callback fornita dallo store
-        callback(updatedResource.id, updatedResource);
-      }
+      const resource = {
+        id: e.record.id,
+        name: e.record.name,
+        quantity: e.record.quantity,
+        unit: e.record.unit,
+        type: e.record.type
+      };
+
+      // Chiama la callback fornita dallo store con l'azione e la risorsa
+      callback(e.action, resource);
     });
 
     // Ritorna una funzione di cleanup

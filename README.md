@@ -4,9 +4,11 @@
 - Livello: Intermedio (Richiede basi di React)
 
 ## Lo Scenario
-Non stiamo più solo contando numeri. Sei l'ufficiale IT della Stazione Spaziale Alpha. Devi costruire un pannello di controllo per monitorare le risorse vitali (Ossigeno, Carburante, Cibo).
+Non stiamo più solo contando numeri. Sei l'ufficiale IT della Stazione Spaziale Alpha. 
+Devi costruire un pannello di controllo per monitorare le risorse vitali (Ossigeno, Carburante, Cibo).
 
-Il problema: I sensori sono lenti, ma l'equipaggio ha bisogno di un'interfaccia reattiva immediata. La soluzione: Usare Zustand per gestire lo stato locale e sincronizzarlo con il database.
+Il problema: I sensori sono lenti, ma l'equipaggio ha bisogno di un'interfaccia reattiva immediata. 
+La soluzione: Usare Zustand per gestire lo stato locale e sincronizzarlo con il database.
 
 ## Architettura e Requisiti
 
